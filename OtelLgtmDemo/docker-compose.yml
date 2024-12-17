@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  # Grafana LGTM Stack
+  otel-lgtm:
+    image: grafana/otel-lgtm
+    ports:
+      - "3000:3000"  # Grafana UI
+      - "4317:4317"  # OTLP gRPC
+      - "4318:4318"  # OTLP HTTP
+
+  # C# WebAPI application
+  webapi:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    depends_on:
+      - otel-lgtm
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-lgtm:4317
