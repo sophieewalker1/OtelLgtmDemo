@@ -11,12 +11,12 @@ services:
   # C# WebAPI application
   webapi:
     build: 
-      context: .
-      dockerfile: Dockerfile
+      context: ./OtelLgtmDemo  # Change the context to the project directory
+      dockerfile: ../Dockerfile     # Adjust dockerfile path
     ports:
-      - "5000:8080"
+      - "5000:80"                   # Map to port 80 inside the container
     depends_on:
       - otel-lgtm
     environment:
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=http://+:80  # Change to port 80
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-lgtm:4317
